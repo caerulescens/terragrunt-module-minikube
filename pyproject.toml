@@ -1,0 +1,20 @@
+[tool.poetry]
+name = "terragrunt-module-minikube"
+version = "0.1.0"
+description = "Terragrunt module for minikube."
+authors = ["Andrew Linzie <andrew@genericware.org>"]
+readme = "README.md"
+packages = [{include = "terragrunt_module_minikube", from = "src"}]
+
+[tool.poetry.dependencies]
+python = ">=3.10,<3.13"
+
+[tool.poetry.group.dev.dependencies]
+pytest = "^7.4.2"
+pytest-cov = "^4.1.0"
+pytest-sugar = "^0.9.7"
+tftest = "^1.8.5"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
