@@ -1,5 +1,5 @@
 locals {
-  base_source_url    = "git::git@github.com:caerulescens/demo.terraform-module-minikube.git"
+  base_source_url    = "git::git@github.com:caerulescens/demo.tofu-module-minikube.git"
   ref                = "feature/mvp"
   kubernetes_version = "1.30.0"
 }
