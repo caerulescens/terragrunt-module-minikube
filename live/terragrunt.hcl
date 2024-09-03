@@ -16,6 +16,6 @@ locals {
 inputs = merge(
   local.platform_vars.locals,
   local.region_vars.locals,
-  local.environment_vars.locals
+  local.environment_vars.locals,
   local.profile_vars.locals
 )
