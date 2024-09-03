@@ -1,6 +1,6 @@
 locals {
   base_source_url    = "git::git@github.com:genericware/terraform-module-minikube.git"
-  ref                = "master"
+  ref                = "feature/mvp"
   kubernetes_version = "1.30.0"
 }
 
