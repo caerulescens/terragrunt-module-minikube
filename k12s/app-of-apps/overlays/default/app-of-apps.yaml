@@ -23,8 +23,8 @@ spec:
           domain: genericware.test
           platform: minikube
           profile: default
-          repository: https://github.com/genericware/terragrunt-devops.git
-          branch: feature/patches-1
+          repository: https://github.com/genericware/demo.terragrunt-module-minikube.git
+          branch: feature/mvp
         network:
           enabled: true
           mode: istio
