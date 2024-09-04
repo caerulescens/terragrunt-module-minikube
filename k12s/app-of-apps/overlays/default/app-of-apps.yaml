@@ -23,7 +23,7 @@ spec:
           domain: genericware.test
           platform: minikube
           profile: default
-          repository: https://github.com/genericware/demo.terragrunt-module-minikube.git
+          repository: https://github.com/caerulescens/demo.terragrunt-module-minikube.git
           branch: feature/mvp
         network:
           enabled: true
