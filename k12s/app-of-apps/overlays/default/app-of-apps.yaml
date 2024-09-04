@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/genericware/helm-charts.git
-    targetRevision: master
+    targetRevision: bugfix/patches-1
     path: charts/app-of-apps
     helm:
       valuesObject:
