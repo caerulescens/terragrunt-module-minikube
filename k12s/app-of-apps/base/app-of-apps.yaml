@@ -20,7 +20,7 @@ spec:
           organization: genericware
           environment: development
           region: local
-          domain: genericware.org
+          domain: genericware.test
           platform: minikube
           profile: default
         network:
