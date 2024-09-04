@@ -9,9 +9,9 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://github.com/genericware/app-of-apps.git
+    repoURL: https://github.com/genericware/helm-charts.git
     targetRevision: master
-    path: .
+    path: charts/app-of-apps
     helm:
       valuesObject:
         project:
