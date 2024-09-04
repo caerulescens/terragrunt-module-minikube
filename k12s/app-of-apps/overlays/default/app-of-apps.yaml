@@ -10,7 +10,7 @@ spec:
   project: default
   source:
     repoURL: https://github.com/genericware/app-of-apps.git
-    targetRevision: feature/patches-1
+    targetRevision: master
     path: .
     helm:
       valuesObject:
@@ -24,7 +24,7 @@ spec:
           platform: minikube
           profile: default
           repository: https://github.com/genericware/demo.terragrunt-module-minikube.git
-          branch: master
+          branch: feature/mvp
         network:
           enabled: true
           mode: istio
