@@ -24,7 +24,7 @@ spec:
           platform: minikube
           profile: default
           repository: https://github.com/genericware/demo.terragrunt-module-minikube.git
-          branch: feature/mvp
+          branch: master
         network:
           enabled: true
           mode: istio
