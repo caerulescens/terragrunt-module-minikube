@@ -43,11 +43,17 @@ helmCharts:
   version: 6.23.1
   namespace: oauth2-proxy
   includeCRDs: true
-- name: lgtm-distributed
-  repo: https://grafana.github.io/helm-charts
-  version: 1.0.1
-  namespace: lgtm
+- name: kube-prometheus-stack
+  repo: https://prometheus-community.github.io/helm-charts
+  version: 48.1.1
+  namespace: kube-prometheus
   includeCRDs: true
+# todo: lgtm-distributed
+#- name: lgtm-distributed
+#  repo: https://grafana.github.io/helm-charts
+#  version: 1.0.1
+#  namespace: lgtm
+#  includeCRDs: true
 - name: promtail
   repo: https://grafana.github.io/helm-charts
   version: 6.11.5
