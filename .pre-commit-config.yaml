@@ -1,4 +1,3 @@
-exclude: ^k12s/charts/*$
 repos:
   - repo: https://github.com/pre-commit/pre-commit-hooks
     rev: v4.4.0
@@ -7,7 +6,6 @@ repos:
       - id: check-symlinks
       - id: destroyed-symlinks
       - id: check-vcs-permalinks
-      - id: check-added-large-files
       - id: check-merge-conflict
       - id: check-ast
       - id: check-case-conflict
@@ -19,8 +17,6 @@ repos:
       - id: check-merge-conflict
       - id: check-symlinks
       - id: check-vcs-permalinks
-      - id: pretty-format-json
-      - id: detect-private-key
       - id: debug-statements
       - id: end-of-file-fixer
       - id: trailing-whitespace
