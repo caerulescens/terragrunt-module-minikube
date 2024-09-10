@@ -7,6 +7,7 @@ A [`terragrunt`](https://github.com/gruntwork-io/terragrunt) module for [`miniku
 | name                                                     |
 |----------------------------------------------------------|
 | [docker](https://github.com/docker)                      |
+| [minikube](https://github.com/kubernetes/minikube)       |
 | [kubectl](https://github.com/kubernetes/kubectl)         |
 | [terragrunt](https://github.com/gruntwork-io/terragrunt) |
 | [terraform](https://github.com/hashicorp/terraform)      |
