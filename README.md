@@ -30,7 +30,7 @@ minikube_clusters = {
   "minikube": {
     "driver": "docker",
     "nodes": 3,
-    "cpu": 4,
+    "cpus": 4,
     "memory": "4096mb"
   }
 }
