@@ -1,0 +1,42 @@
+{{ if and .Values.applications.istio.enabled (eq .Values.network.mode "istio") }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-base
+  namespace: {{ .Values.applications.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .Values.applications.istio.base.wave | quote }}
+  labels:
+    {{- include "app-of-apps.labels" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.applications.istio.base.namespace }}
+  project: {{ .Values.project.name }}
+  source:
+    path: k12s/charts/base-{{ .Values.applications.istio.revision }}/base
+    repoURL: {{ .Values.project.repository }}
+    targetRevision: {{ .Values.project.branch }}
+    helm:
+      valueFiles:
+        - values.yaml
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        istio-injection: enabled
+  ignoreDifferences:
+    # fixes reconciliation loop
+    # see: https://github.com/argoproj/argo-cd/issues/9323
+    - group: admissionregistration.k8s.io
+      kind: ValidatingWebhookConfiguration
+      name: istiod-default-validator
+      jsonPointers:
+        - /webhooks/0/failurePolicy
+{{ end }}

@@ -1,0 +1,221 @@
+# -- provide a name in place of 'app-of-apps'
+nameOverride: app-of-apps
+# -- string to fully override `"app-of-apps.fullname"`
+fullnameOverride: ""
+
+project:
+  # -- project name
+  name: default
+  # -- project description
+  description: application that launches other applications
+  # -- project organization
+  organization: genericware
+  # -- project environment: 'development', 'staging', 'production'
+  environment: development
+  # -- project region: 'local', ...
+  region: local
+  # -- project cluster domain
+  domain: genericware.test
+  # -- project cluster platform: 'minikube', 'gke'
+  platform: minikube
+  # -- project cluster profile: 'demo', 'default'
+  profile: demo
+  # -- project gitops repository
+  repository: https://github.com/caerulescens/terragrunt-module-minikube.git
+  # -- project gitops branch
+  branch: feature/mvp
+
+network:
+  # -- network enable: 'true', 'false'
+  enabled: false
+  # -- network mode: 'istio'
+  mode: istio
+  # -- network issuer: 'selfsigned', 'acme'
+  issuer: selfsigned
+
+logs:
+  # -- logs enable: 'true', 'false'
+  enabled: false
+  # -- logs level: 'trace', 'debug', 'info', 'warn', 'error', 'critical'
+  level: info
+  # -- logs format: 'json'
+  format: json
+
+metrics:
+  # -- metrics enable: 'true', 'false'
+  enabled: false
+
+traces:
+  # -- traces enable: 'true', 'false'
+  enabled: false
+
+applications:
+
+  istio:
+    # -- istio enable: 'true', 'false'
+    enabled: false
+    # -- istio version
+    revision: 1.18.0
+    base:
+      # -- istio-base namespace
+      namespace: istio-system
+      wave: -220
+    istiod:
+      # -- istiod namespace
+      namespace: istio-system
+      wave: -210
+    gateway:
+      # -- gateway namespace
+      namespace: istio-ingress
+      wave: -200
+
+  certManager:
+    # -- cert-manager enable: 'true', 'false'
+    enabled: false
+    # -- cert-manager version
+    revision: 1.13.2
+    # -- cert-manager namespace
+    namespace: cert-manager
+    wave: -190
+
+  keycloak:
+    # -- keycloak enable: 'true', 'false'
+    enabled: false
+    # -- keycloak version
+    revision: 2.3.0
+    # -- keycloak namespace
+    namespace: keycloak
+    wave: -160
+
+  oauth2Proxy:
+    # -- oauth2-proxy enable: 'true', 'false'
+    enabled: false
+    # -- oauth2-proxy version
+    revision: 6.23.1
+    # --oauth2-proxy namespace
+    namespace: oauth2-proxy
+    wave: -150
+
+  kiali:
+    # -- kiali enable: 'true', 'false'
+    enabled: false
+    # -- kiali version
+    revision: 1.70.0
+    # -- kiali namespace
+    namespace: kiali-operator
+    wave: -130
+
+  argocd:
+    # -- argocd enable: 'true', 'false'
+    enabled: false
+    # -- argocd version
+    revision: 5.49.0
+    # -- argocd namespace
+    namespace: argocd
+    wave: -120
+
+  knative:
+    # -- knative enable: 'true', 'false'
+    enabled: false
+    operator:
+      # -- knative operator version
+      version: 1.11.0
+      # -- knative operator namespace
+      namespace: default
+      wave: -110
+    serving:
+      # -- knative serving version
+      version: 1.11.0
+      # -- knative serving namespace
+      namespace: knative-serving
+      wave: -100
+    eventing:
+      # -- knative eventing version
+      version: 1.11.0
+      # -- knative eventing namespace
+      namespace: knative-eventing
+      wave: -90
+
+  prometheus:
+    # -- prometheus enable: 'true', 'false'
+    enabled: false
+    # -- prometheus version
+    revision: 48.1.1
+    # -- prometheus namespace
+    namespace: kube-prometheus
+    wave: -80
+
+  rook:
+    # -- rook enable: 'true', 'false'
+    enabled: false
+    # -- rook version
+    revision: v1.13.2
+    # -- rook namespace
+    namespace: rook-ceph
+    wave: -70
+
+  loki:
+    # -- loki enable: 'true', 'false'
+    enabled: false
+    # -- loki version
+    revision: 0.69.16
+    # -- loki namespace
+    namespace: loki
+    wave: -60
+
+  promtail:
+    # -- promtail enable: 'true', 'false'
+    enabled: false
+    # -- promtail version
+    revision: 6.11.5
+    # -- promtail namespace
+    namespace: promtail
+    wave: -50
+
+  tempo:
+    # -- tempo enable: 'true', 'false'
+    enabled: false
+    # -- tempo version
+    revision: 1.4.8
+    # -- tempo namespace
+    namespace: tempo
+    wave: -40
+
+  strimzi:
+    # -- strimzi enable: 'true', 'false'
+    enabled: false
+    # -- strimzi version
+    revision: 0.35.1
+    # -- strimzi namesapce
+    namespace: kafka
+    wave: -30
+
+  mysql:
+    # -- mysql enable: 'true', 'false'
+    enabled: false
+    # -- mysql version
+    revision: 2.1.1
+    # -- mysql namespace
+    namespace: mysql-operator
+    wave: -20
+
+  mongodb:
+    # -- mongodb enable: 'true', 'false'
+    enabled: false
+    # -- mongodb version
+    revision: 0.9.0
+    # -- mongodb namespace
+    namespace: mongodb
+    wave: -10
+
+tenants:
+  admin:
+    # -- admin enable: 'true', 'false'
+    enabled: true
+    # -- admin revision
+    revision: 0.1.0
+    # -- admin namespace
+    namespace: default
+    # -- admin values
+    values: values.yaml
+    wave: 0

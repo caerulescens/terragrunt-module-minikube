@@ -1,0 +1,38 @@
+{{ if and .Values.applications.istio.enabled (eq .Values.network.mode "istio") }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istio-ingress
+  namespace: {{ .Values.applications.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .Values.applications.istio.gateway.wave | quote }}
+  labels:
+    {{- include "app-of-apps.labels" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.applications.istio.gateway.namespace }}
+  project: {{ .Values.project.name }}
+  source:
+    path: k12s/charts/gateway-{{ .Values.applications.istio.revision }}/gateway
+    repoURL: {{ .Values.project.repository }}
+    targetRevision: {{ .Values.project.branch }}
+    helm:
+      valuesObject:
+        global:
+          logAsJson: {{ ternary true false (eq .Values.logs.format "json") }}
+        labels:
+          app.kubernetes.io/name: istio-ingress
+          app.kubernetes.io/version: v{{ .Values.applications.istio.revision }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        istio-injection: enabled
+{{ end }}

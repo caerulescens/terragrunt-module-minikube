@@ -1,0 +1,31 @@
+{{ if and .Values.applications.kiali.enabled (and .Values.network.enabled (and .Values.applications.istio.enabled (eq .Values.network.mode "istio"))) }}
+apiVersion: networking.istio.io/v1beta1
+kind: Gateway
+metadata:
+  name: kiali-ingress-gateway
+  namespace: {{ .Values.applications.istio.gateway.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: "-129"
+    argocd.argoproj.io/sync-options: SkipDryRunOnMissingResource=true
+spec:
+  selector:
+    istio: ingress
+  servers:
+    - hosts:
+        - kiali.{{ .Values.project.environment }}.{{ .Values.project.region }}.{{ .Values.project.domain }}
+      port:
+        name: http
+        number: 80
+        protocol: HTTP
+      tls:
+        httpsRedirect: true
+    - hosts:
+        - kiali.{{ .Values.project.environment }}.{{ .Values.project.region }}.{{ .Values.project.domain }}
+      port:
+        name: https
+        number: 443
+        protocol: HTTPS
+      tls:
+        mode: SIMPLE
+        credentialName: kiali-server-tls
+{{ end }}

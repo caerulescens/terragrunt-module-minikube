@@ -1,0 +1,49 @@
+{{ if and .Values.applications.istio.enabled (eq .Values.network.mode "istio") }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: istiod
+  namespace: {{ .Values.applications.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .Values.applications.istio.istiod.wave | quote }}
+  labels:
+    {{- include "app-of-apps.labels" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.applications.istio.istiod.namespace }}
+  project: {{ .Values.project.name }}
+  source:
+    path: k12s/charts/istiod-{{ .Values.applications.istio.revision }}/istiod
+    repoURL: {{ .Values.project.repository }}
+    targetRevision: {{ .Values.project.branch }}
+    helm:
+      valuesObject:
+        profile: {{ .Values.project.profile | trim | lower }}
+        pilot:
+          podLabels:
+            app.kubernetes.io/name: istiod
+            app.kubernetes.io/version: v{{ .Values.applications.istio.revision }}
+        meshConfig:
+          rootNamespace: {{ .Values.applications.istio.istiod.namespace }}
+          trustDomain: "cluster.local"
+        global:
+          logAsJson: {{ ternary true false (eq .Values.logs.format "json") }}
+          accessLogFile: /dev/stdout
+          proxy:
+            tracer: "zipkin"
+          tracer:
+            zipkin:
+              address: "tempo-distributed-distributor.tempo.svc.cluster.local:9411"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        istio-injection: enabled
+{{ end }}

@@ -1,0 +1,45 @@
+{{ if .Values.applications.certManager.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: cert-manager
+  namespace: {{ .Values.applications.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .Values.applications.certManager.wave | quote }}
+  labels:
+    {{- include "app-of-apps.labels" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.applications.certManager.namespace }}
+  project: {{ .Values.project.name }}
+  source:
+    path: k12s/charts/cert-manager-{{ .Values.applications.certManager.revision }}/cert-manager
+    repoURL: {{ .Values.project.repository }}
+    targetRevision: {{ .Values.project.branch }}
+    helm:
+      valuesObject:
+        installCRDs: true
+        extraArgs:
+          - --logging-format={{ .Values.logs.format }}
+        webhook:
+          extraArgs:
+            - --logging-format={{ .Values.logs.format }}
+        cainjector:
+          extraArgs:
+            - --logging-format={{ .Values.logs.format }}
+        startupapicheck:
+          podAnnotations:
+            sidecar.istio.io/inject: "false"
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        istio-injection: enabled
+{{ end }}

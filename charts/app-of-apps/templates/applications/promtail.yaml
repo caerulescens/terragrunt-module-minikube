@@ -1,0 +1,172 @@
+{{ if .Values.applications.promtail.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: promtail
+  namespace: {{ .Values.applications.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .Values.applications.promtail.wave | quote }}
+  labels:
+    {{- include "app-of-apps.labels" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.applications.promtail.namespace }}
+  project: {{ .Values.project.name }}
+  source:
+    path: k12s/charts/promtail-{{ .Values.applications.promtail.revision }}/promtail
+    repoURL: {{ .Values.project.repository }}
+    targetRevision: {{ .Values.project.branch }}
+    helm:
+      valuesObject:
+        podLabels:
+          app.kubernetes.io/version: v{{ .Values.applications.promtail.revision }}
+        config:
+          logLevel: {{ .Values.logs.level }}
+          logFormat: {{ .Values.logs.format }}
+          clients:
+            - url: http://loki-distributed-gateway.loki/loki/api/v1/push
+          enableTracing: {{ .Values.traces.enabled }}
+          snippets:
+            pipelineStages:
+              - json:
+                  expressions:
+                    log: log
+                    stream: stream
+                    time: time
+              # argo-cd
+              - match:
+                  selector: '{instance="argo-cd", container!="istio-proxy"}'
+                  stages:
+                    - json:
+                        expressions:
+                          level: level
+                        source: log
+                    - labels:
+                        level: level
+                    - output:
+                        source: log
+              # cert-manager
+              - match:
+                  selector: '{instance="cert-manager", container!="istio-proxy"}'
+                  stages:
+                    - output:
+                        source: log
+              {{ if .Values.applications.istio.enabled }}
+              # istio
+              - match:
+                  selector: '{app=~"istio-ingress|istiod"}'
+                  stages:
+                    - json:
+                        expressions:
+                          level: level
+                        source: log
+                    - labels:
+                        level: level
+                    - output:
+                        source: log
+              - match:
+                  selector: '{container="istio-proxy"}'
+                  stages:
+                    - json:
+                        expressions:
+                          level: level
+                        source: log
+                    - labels:
+                        level: level
+                    - output:
+                        source: log
+              {{- end }}
+              {{if .Values.applications.kiali.enabled }}
+              # kiali
+              - match:
+                  selector: '{instance="kiali", container!="istio-proxy"}'
+                  stages:
+                    - json:
+                        expressions:
+                          level: level
+                        source: log
+                    - labels:
+                        level: level
+                    - output:
+                        source: log
+              {{- end }}
+              {{if .Values.applications.knative.enabled }}
+              # knative
+              - match:
+                  selector: '{app=~"knative-eventing|knative-serving", container!="istio-proxy"}'
+                  stages:
+                    - json:
+                        expressions:
+                          level: level
+                        source: log
+                    - labels:
+                        level: level
+                    - output:
+                        source: log
+              - match:
+                  selector: '{app="knative-operator", container!="istio-proxy"}'
+                  stages:
+                    - json:
+                        expressions:
+                          level: severity
+                        source: log
+                    - labels:
+                        level: level
+                    - output:
+                        source: log
+              {{- end }}
+              {{if .Values.applications.prometheus.enabled }}
+              # prometheus
+              - match:
+                  selector: '{instance="kube-prometheus", container!="istio-proxy"}'
+                  stages:
+                    - json:
+                        expressions:
+                          level: level
+                        source: log
+                    - labels:
+                        level: level
+                    - output:
+                        source: log
+              {{- end }}
+              {{if .Values.applications.loki.enabled }}
+              # loki
+              - match:
+                  selector: '{instance="loki-distributed", container!~"istio-proxy|nginx"}'
+                  stages:
+                    - json:
+                        expressions:
+                          level: level
+                        source: log
+                    - labels:
+                        level: level
+                    - output:
+                        source: log
+              {{- end }}
+              {{ if .Values.applications.tempo.enabled }}
+              # tempo
+              - match:
+                  selector: '{instance="tempo-distributed", container!="istio-proxy"}'
+                  stages:
+                    - json:
+                        expressions:
+                          level: level
+                        source: log
+                    - labels:
+                        level: level
+                    - output:
+                        source: log
+              {{- end }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        istio-injection: enabled
+{{ end }}

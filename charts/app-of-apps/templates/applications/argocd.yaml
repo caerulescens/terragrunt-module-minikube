@@ -1,0 +1,70 @@
+{{ if .Values.applications.argocd.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: argocd
+  namespace: {{ .Values.applications.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .Values.applications.argocd.wave | quote }}
+    argocd.argoproj.io/sync-options: Delete=false
+  labels:
+    {{- include "app-of-apps.labels" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.applications.argocd.namespace }}
+  project: {{ .Values.project.name }}
+  source:
+    path: k12s/charts/argo-cd-v{{ .Values.applications.argocd.revision }}/argo-cd
+    repoURL: {{ .Values.project.repository }}
+    targetRevision: {{ .Values.project.branch }}
+    helm:
+      valuesObject:
+        global:
+          logging:
+            format: {{ .Values.logs.format }}
+            level: {{ .Values.logs.level }}
+        server:
+          extraArgs:
+            - --insecure
+        applicationSet:
+          service:
+            portName: tcp-webhook
+        configs:
+          cm:
+            resource.customizations: |
+              cert-manager.io/Certificate:
+                health.lua: |
+                  hs = {}
+                  if obj.status ~= nil then
+                    if obj.status.conditions ~= nil then
+                      for i, condition in ipairs(obj.status.conditions) do
+                        if condition.type == "Ready" and condition.status == "False" then
+                          hs.status = "Degraded"
+                          hs.message = condition.message
+                          return hs
+                        end
+                        if condition.type == "Ready" and condition.status == "True" then
+                          hs.status = "Healthy"
+                          hs.message = condition.message
+                          return hs
+                        end
+                      end
+                    end
+                  end
+                  hs.status = "Progressing"
+                  hs.message = "Waiting for certificate"
+                  return hs
+
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        istio-injection: enabled
+{{ end }}

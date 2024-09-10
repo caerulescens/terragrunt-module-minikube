@@ -1,0 +1,135 @@
+{{ if .Values.applications.kiali.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: kiali-operator
+  namespace: {{ .Values.applications.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .Values.applications.kiali.wave | quote }}
+  labels:
+    {{- include "app-of-apps.labels" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.applications.kiali.namespace }}
+  project: {{ .Values.project.name }}
+  source:
+    path: k12s/charts/kiali-operator-{{ .Values.applications.kiali.revision }}/kiali-operator
+    repoURL: {{ .Values.project.repository }}
+    targetRevision: {{ .Values.project.branch }}
+    helm:
+      valuesObject:
+        cr:
+          create: true
+          namespace: {{ .Values.applications.istio.istiod.namespace }}
+          spec:
+            deployment:
+              logger:
+                log_level: {{ .Values.logs.level }}
+                log_format: {{ .Values.logs.format }}
+            api:
+              namespaces:
+                exclude:
+                  - "kube-public"
+                  - "kube-system"
+                  - "kube-node-lease"
+                  - "kiali-operator"
+            server:
+              audit_log: true
+              cors_allow_all: false
+              gzip_enabled: true
+              observability:
+                metrics:
+                  enabled: true
+                  port: 9090
+                tracing:
+                  collector_url: "http://jaeger-operator-jaeger-collector.jaeger:14268/api/traces"
+                  enabled: false
+              port: 20001
+            istio_labels:
+              app_label_name: "app.kubernetes.io/name"
+              version_label_name: "app.kubernetes.io/version"
+            kiali_feature_flags:
+              certificates_information_indicators:
+                enabled: true
+                secrets:
+                  - "cacerts"
+                  - "istio-ca-secret"
+              ui_defaults:
+                graph:
+                  traffic:
+                    grpc: "requests" # Valid values: none, requests, sent, received and total
+                    http: "requests" # Valid values: none and requests
+                    tcp: "sent"     # Valid values: none, sent, received and total
+                  find_options:
+                    - description: "Find: slow edges (> 1s)"
+                      expression: "rt > 1000"
+                    - description: "Find: unhealthy nodes"
+                      expression: "! healthy"
+                    - description: "Find: unknown nodes"
+                      expression: "name = unknown"
+                  hide_options:
+                    - description: "Hide: healthy nodes"
+                      expression: "healthy"
+                    - description: "Hide: unknown nodes"
+                      expression: "name = unknown"
+                metrics_per_refresh: "1m"
+                namespaces: [ "istio-system", "istio-ingress" ]
+                refresh_interval: "60s"
+            health_config:
+              rate:
+                - namespace: ".*"
+                  kind: ".*"
+                  name: ".*"
+                  tolerance:
+                    - code: "^5\\d\\d$"
+                      direction: ".*"
+                      protocol: "http"
+                      degraded: 0
+                      failure: 10
+                    - code: "^4\\d\\d$"
+                      direction: ".*"
+                      protocol: "http"
+                      degraded: 10
+                      failure: 20
+                    - code: "^[1-9]$|^1[0-6]$"
+                      direction: ".*"
+                      protocol: "grpc"
+                      degraded: 0
+                      failure: 10
+            external_services:
+              istio:
+                root_namespace: {{ .Values.applications.istio.istiod.namespace }}
+                url_service_version: "http://istiod.istio-system:15014/version"
+                istiod_pod_monitoring_port: 15014
+                component_status:
+                  components:
+                    - app_label: "istiod"
+                      is_core: true
+                      is_proxy: false
+                      namespace: {{ .Values.applications.istio.istiod.namespace }}
+                    - app_label: "istio-ingress"
+                      is_core: false
+                      is_proxy: true
+                      namespace: {{ .Values.applications.istio.gateway.namespace }}
+                  enabled: true
+              grafana:
+                enabled: true
+                in_cluster_url: "http://kube-prometheus-stack-grafana.kube-prometheus:80/"
+                url: "http://kube-prometheus-stack-grafana.kube-prometheus:3000/"
+              prometheus:
+                url: "http://kube-prometheus-stack-prometheus.kube-prometheus:9090/"
+                is_core: true
+              tracing:
+                enabled: false
+                in_cluster_url: "http://tempo-distributed-gateway.tempo.svc.cluster.local:80/jaeger-query"
+                use_grpc: false
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+{{ end }}

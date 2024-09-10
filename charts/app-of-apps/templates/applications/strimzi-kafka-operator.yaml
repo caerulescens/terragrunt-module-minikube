@@ -1,0 +1,66 @@
+{{ if .Values.applications.strimzi.enabled }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: strimzi-kafka-operator
+  namespace: {{ .Values.applications.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .Values.applications.strimzi.wave | quote }}
+  labels:
+    {{- include "app-of-apps.labels" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.applications.strimzi.namespace }}
+  project: {{ .Values.project.name }}
+  source:
+    path: k12s/charts/strimzi-kafka-operator-{{ .Values.applications.strimzi.revision }}/strimzi-kafka-operator
+    repoURL: {{ .Values.project.repository }}
+    targetRevision: {{ .Values.project.branch }}
+    helm:
+      valuesObject:
+        logConfiguration: |
+          name = COConfig
+          monitorInterval = 30
+
+          appender.console.type = Console
+          appender.console.name = STDOUT
+          appender.console.layout.type = JsonLayout
+          appender.console.layout.properties = true
+          appender.console.layout.compact = true
+          appender.console.layout.eventEol = true
+
+          rootLogger.level = INFO
+          rootLogger.appenderRefs = stdout
+          rootLogger.appenderRef.console.ref = STDOUT
+          rootLogger.additivity = false
+
+          # Kafka AdminClient logging is a bit noisy at INFO level
+          logger.kafka.name = org.apache.kafka
+          logger.kafka.level = WARN
+          logger.kafka.additivity = false
+
+          # Zookeeper is very verbose even on INFO level -> We set it to WARN by default
+          logger.zookeepertrustmanager.name = org.apache.zookeeper
+          logger.zookeepertrustmanager.level = WARN
+          logger.zookeepertrustmanager.additivity = false
+
+          # Keeps separate level for Netty logging -> to not be changed by the root logger
+          logger.netty.name = io.netty
+          logger.netty.level = INFO
+          logger.netty.additivity = false
+        labels:
+          app.kubernetes.io/name: strimzi-kafka-operator
+          app.kubernetes.io/version: v{{ .Values.applications.strimzi.revision }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+    syncOptions:
+      - CreateNamespace=true
+    managedNamespaceMetadata:
+      labels:
+        istio-injection: enabled
+{{ end }}

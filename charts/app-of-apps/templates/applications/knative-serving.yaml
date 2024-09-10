@@ -1,0 +1,31 @@
+{{ if and .Values.applications.knative.enabled (and .Values.applications.istio.enabled (eq .Values.network.mode "istio")) }}
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: knative-serving
+  namespace: {{ .Values.applications.argocd.namespace }}
+  annotations:
+    argocd.argoproj.io/sync-wave: {{ .Values.applications.knative.serving.wave | quote }}
+  labels:
+    {{- include "app-of-apps.labels" . | nindent 4 }}
+  finalizers:
+    - resources-finalizer.argocd.argoproj.io
+spec:
+  destination:
+    server: https://kubernetes.default.svc
+    namespace: {{ .Values.applications.knative.serving.namespace }}
+  project: {{ .Values.project.name }}
+  source:
+    path: k12s/knative-serving/{{ .Values.project.platform }}-{{ .Values.project.environment }}-{{ .Values.project.profile }}
+    kustomize:
+      namespace: {{ .Values.applications.knative.serving.namespace }}
+  syncPolicy:
+    automated:
+      prune: true
+      selfHeal: true
+{{/*    syncOptions:*/}}
+{{/*      - CreateNamespace=true*/}}
+{{/*    managedNamespaceMetadata:*/}}
+{{/*      labels:*/}}
+{{/*        istio-injection: enabled*/}}
+{{ end }}

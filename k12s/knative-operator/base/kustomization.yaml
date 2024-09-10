@@ -1,0 +1,6 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - https://github.com/knative/operator/releases/download/knative-v1.10.2/operator.yaml
+  - https://raw.githubusercontent.com/knative-sandbox/monitoring/main/servicemonitor.yaml
+  - https://raw.githubusercontent.com/knative-sandbox/monitoring/main/grafana/dashboards.yaml
