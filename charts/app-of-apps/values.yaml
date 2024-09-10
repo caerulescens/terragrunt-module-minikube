@@ -23,7 +23,7 @@ project:
   # -- project gitops repository
   repository: https://github.com/caerulescens/terragrunt-module-minikube.git
   # -- project gitops branch
-  branch: master
+  branch: feature/mvp
 
 network:
   # -- network enable: 'true', 'false'
