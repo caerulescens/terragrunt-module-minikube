@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.rook.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/rook-ceph-{{ .Values.applications.rook.revision }}/rook-ceph
+    path: k12s/charts/rook-ceph-{{ .Values.applications.rook.revision }}/rook-ceph
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

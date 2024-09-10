@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.istio.base.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/base-{{ .Values.applications.istio.revision }}/base
+    path: k12s/charts/base-{{ .Values.applications.istio.revision }}/base
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

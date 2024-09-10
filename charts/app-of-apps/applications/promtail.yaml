@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.promtail.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/promtail-{{ .Values.applications.promtail.revision }}/promtail
+    path: k12s/charts/promtail-{{ .Values.applications.promtail.revision }}/promtail
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

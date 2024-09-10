@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.istio.istiod.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/istiod-{{ .Values.applications.istio.revision }}/istiod
+    path: k12s/charts/istiod-{{ .Values.applications.istio.revision }}/istiod
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

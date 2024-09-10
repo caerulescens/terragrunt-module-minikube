@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.istio.gateway.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/gateway-{{ .Values.applications.istio.revision }}/gateway
+    path: k12s/charts/gateway-{{ .Values.applications.istio.revision }}/gateway
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

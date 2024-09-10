@@ -17,7 +17,7 @@ spec:
     namespace: {{ .Values.applications.argocd.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/argo-cd-v{{ .Values.applications.argocd.revision }}/argo-cd
+    path: k12s/charts/argo-cd-v{{ .Values.applications.argocd.revision }}/argo-cd
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

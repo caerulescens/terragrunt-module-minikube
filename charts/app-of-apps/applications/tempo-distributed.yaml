@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.tempo.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/tempo-distributed-{{ .Values.applications.tempo.revision }}/tempo-distributed
+    path: k12s/charts/tempo-distributed-{{ .Values.applications.tempo.revision }}/tempo-distributed
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

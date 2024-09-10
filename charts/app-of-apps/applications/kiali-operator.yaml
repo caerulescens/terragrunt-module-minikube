@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.kiali.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/kiali-operator-{{ .Values.applications.kiali.revision }}/kiali-operator
+    path: k12s/charts/kiali-operator-{{ .Values.applications.kiali.revision }}/kiali-operator
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.keycloak.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/keycloakx-{{ .Values.applications.keycloak.revision }}/keycloakx
+    path: k12s/charts/keycloakx-{{ .Values.applications.keycloak.revision }}/keycloakx
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

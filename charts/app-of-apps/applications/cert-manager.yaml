@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.certManager.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/cert-manager-{{ .Values.applications.certManager.revision }}/cert-manager
+    path: k12s/charts/cert-manager-{{ .Values.applications.certManager.revision }}/cert-manager
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

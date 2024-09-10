@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.mysql.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/mysql-operator-{{ .Values.applications.mysql.revision }}/mysql-operator
+    path: k12s/charts/mysql-operator-{{ .Values.applications.mysql.revision }}/mysql-operator
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

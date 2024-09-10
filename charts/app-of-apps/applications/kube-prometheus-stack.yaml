@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.prometheus.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/kube-prometheus-stack-{{ .Values.applications.prometheus.revision }}/kube-prometheus-stack
+    path: k12s/charts/kube-prometheus-stack-{{ .Values.applications.prometheus.revision }}/kube-prometheus-stack
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:

@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.oauth2Proxy.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/oauth2-proxy-{{ .Values.applications.oauth2Proxy.revision }}/oauth2-proxy
+    path: k12s/charts/oauth2-proxy-{{ .Values.applications.oauth2Proxy.revision }}/oauth2-proxy
     repoURL: https://github.com/genericware/terragrunt-devops
     helm:
       valueFiles:

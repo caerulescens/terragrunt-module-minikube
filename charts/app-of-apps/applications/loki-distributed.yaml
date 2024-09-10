@@ -16,7 +16,7 @@ spec:
     namespace: {{ .Values.applications.loki.namespace }}
   project: {{ .Values.project.name }}
   source:
-    path: charts/loki-distributed-{{ .Values.applications.loki.revision }}/loki-distributed
+    path: k12s/charts/loki-distributed-{{ .Values.applications.loki.revision }}/loki-distributed
     repoURL: {{ .Values.project.repository }}
     targetRevision: {{ .Values.project.branch }}
     helm:
