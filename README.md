@@ -1,61 +1,50 @@
 # terragrunt-module-minikube
 
-Terragrunt module for minikube.
+A [`terragrunt`](https://github.com/gruntwork-io/terragrunt) module for [`minikube`](https://github.com/kubernetes/minikube).
 
 ## Install
 
-[//]: # (todo: links and descriptions)
-| name                                                   | description                                            |
-|--------------------------------------------------------|--------------------------------------------------------|
-| [pyenv](https://github.com/pyenv/pyenv)                | Python version management                              |
-| [poetry](https://github.com/python-poetry)             | Python packaging and dependency management             |
-| [tenv](https://github.com/tofuutils/tenv)              | OpenTofu, Terraform, and Terragrunt version management |
-| [tflint](https://github.com/terraform-linters/tflint)  | Terraform linter                                       |
-| [pre-commit](https://github.com/pre-commit/pre-commit) | Multi-language automated checks                        |
-| [docker]()                                             |                                                        |
-| [kubectl]()                                            |                                                        |
-| [terragrunt]()                                         |                                                        |
-| [terraform]()                                          |                                                        |
-| [opentofu]()                                           |                                                        |
-| [argocd]()                                             |                                                        |
-| [istioctl]()                                           |                                                        |
-| [kn]()                                                 |                                                        |
-| [func]()                                               |                                                        |
-| [kcat]()                                               |                                                        |
+| name                                                     |
+|----------------------------------------------------------|
+| [pyenv](https://github.com/pyenv/pyenv)                  |
+| [poetry](https://github.com/python-poetry)               |
+| [docker](https://github.com/docker)                      |
+| [kubectl](https://github.com/kubernetes/kubectl)         |
+| [terragrunt](https://github.com/gruntwork-io/terragrunt) |
+| [terraform](https://github.com/hashicorp/terraform)      |
+| [opentofu](https://github.com/opentofu/opentofu)         |
+| [pre-commit](https://github.com/pre-commit/pre-commit)   |
 
-Development:
 ```shell
 pre-commit install
 poetry install
 poetry shell
 ```
 
-Production:
-```shell
-poetry install --without dev
-```
-
 ## Usage
+
+Configure:
+```shell
+cat <<EOF > live/minikube/local/dev/default/terragrunt-module-minikube/terraform.tfvars
+minikube_clusters = {
+  "minikube": {
+    "driver": "docker",
+    "nodes": 3,
+    "cpu": 4,
+    "memory": "4096mb"
+  }
+}
+EOF
+```
 
 Run:
 ```shell
-cd live/minikube/local/dev/default/terragrunt-module-minikube
-terragrunt init
-terragrunt plan
-terragrunt apply
-kustomize build --enable-helm
-helm install --create-namespace --namespace argocd argocd charts/argo-cd-v5.49.0/argo-cd
+terragrunt init --terragrunt-working-dir live/minikube/local/dev/default/terragrunt-module-minikube
+terragrunt plan --terragrunt-working-dir live/minikube/local/dev/default/terragrunt-module-minikube
+terragrunt apply --terragrunt-working-dir live/minikube/local/dev/default/terragrunt-module-minikube
+kustomize build --enable-helm k12s/
+helm install --create-namespace --namespace argocd argocd k12s/charts/argo-cd-v5.49.0/argo-cd
 kustomize build --enable-helm k12s/app-of-apps/overlays/default | kubectl apply -f -
-```
-
-Test:
-```shell
-pytest .
-```
-
-Doc:
-```shell
-make -C docs html
 ```
 
 Check:

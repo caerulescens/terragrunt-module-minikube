@@ -1,6 +1,6 @@
 locals {
-  base_source_url    = "git::git@github.com:caerulescens/demo.tofu-module-minikube.git"
-  ref                = "feature/mvp"
+  base_source_url    = "git::git@github.com:caerulescens/tofu-module-minikube.git"
+  ref                = "master"
   kubernetes_version = "v1.30.0"
 }
 
@@ -23,9 +23,9 @@ remote_state {
     if_exists = "overwrite"
   }
   config = {
-    
+
     path = "${get_parent_terragrunt_dir()}/${path_relative_to_include()}/terraform.tfstate"
-    
+
   }
 }
 
