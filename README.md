@@ -23,6 +23,11 @@ poetry shell
 
 ## Usage
 
+Build:
+```shell
+kustomize build --enable-helm k12s/
+```
+
 Configure:
 ```shell
 cat <<EOF > live/minikube/local/dev/default/terragrunt-module-minikube/terraform.tfvars
@@ -42,7 +47,6 @@ Run:
 terragrunt init --terragrunt-working-dir live/minikube/local/dev/default/terragrunt-module-minikube
 terragrunt plan --terragrunt-working-dir live/minikube/local/dev/default/terragrunt-module-minikube
 terragrunt apply --terragrunt-working-dir live/minikube/local/dev/default/terragrunt-module-minikube
-kustomize build --enable-helm k12s/
 helm install --create-namespace --namespace argocd argocd k12s/charts/argo-cd-v5.49.0/argo-cd
 kustomize build --enable-helm k12s/app-of-apps/overlays/default | kubectl apply -f -
 ```
