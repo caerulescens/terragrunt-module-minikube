@@ -16,8 +16,6 @@ A [`terragrunt`](https://github.com/gruntwork-io/terragrunt) module for [`miniku
 
 ```shell
 pre-commit install
-poetry install
-poetry shell
 ```
 
 ## Usage
