@@ -6,8 +6,6 @@ A [`terragrunt`](https://github.com/gruntwork-io/terragrunt) module for [`miniku
 
 | name                                                     |
 |----------------------------------------------------------|
-| [pyenv](https://github.com/pyenv/pyenv)                  |
-| [poetry](https://github.com/python-poetry)               |
 | [docker](https://github.com/docker)                      |
 | [kubectl](https://github.com/kubernetes/kubectl)         |
 | [terragrunt](https://github.com/gruntwork-io/terragrunt) |
