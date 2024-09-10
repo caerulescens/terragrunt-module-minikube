@@ -1,5 +1,5 @@
 locals {
-  base_source_url    = "git::git@github.com:caerulescens/tofu-module-minikube.git"
+  base_source_url    = "git::https://github.com/caerulescens/tofu-module-minikube.git"
   ref                = "master"
   kubernetes_version = "v1.30.0"
 }
