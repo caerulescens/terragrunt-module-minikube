@@ -9,8 +9,8 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://github.com/genericware/helm-charts.git
-    targetRevision: bugfix/patches-1
+    repoURL: https://github.com/caerulescens/terragrunt-module-minikube.git
+    targetRevision: feature/mvp
     path: charts/app-of-apps
     helm:
       valuesObject:
@@ -23,7 +23,7 @@ spec:
           domain: genericware.test
           platform: minikube
           profile: default
-          repository: https://github.com/caerulescens/demo.terragrunt-module-minikube.git
+          repository: https://github.com/caerulescens/terragrunt-module-minikube.git
           branch: feature/mvp
         network:
           enabled: true
@@ -119,7 +119,6 @@ spec:
             revision: 0.9.0
             namespace: redis-operator
             wave: -10
-        # todo: add tenants
   syncPolicy:
     automated:
       selfHeal: true

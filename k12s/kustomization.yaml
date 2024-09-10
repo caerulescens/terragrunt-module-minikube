@@ -37,7 +37,6 @@ helmCharts:
   version: 1.70.0
   namespace: kiali-operator
   includeCRDs: true
-# todo: mysql-operator
 - name: oauth2-proxy
   repo: https://oauth2-proxy.github.io/manifests
   version: 6.23.1
@@ -48,12 +47,6 @@ helmCharts:
   version: 48.1.1
   namespace: kube-prometheus
   includeCRDs: true
-# todo: lgtm-distributed
-#- name: lgtm-distributed
-#  repo: https://grafana.github.io/helm-charts
-#  version: 1.0.1
-#  namespace: lgtm
-#  includeCRDs: true
 - name: promtail
   repo: https://grafana.github.io/helm-charts
   version: 6.11.5

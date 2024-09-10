@@ -9,8 +9,8 @@ spec:
     server: https://kubernetes.default.svc
   project: default
   source:
-    repoURL: https://github.com/genericware/helm-charts.git
-    targetRevision: master
+    repoURL: https://github.com/caerulescens/terragrunt-module-minikube.git
+    targetRevision: feature/mvp
     path: charts/app-of-apps
     helm:
       valuesObject:
