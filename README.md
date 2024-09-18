@@ -29,7 +29,7 @@ kustomize build --enable-helm k12s/
 
 Configure:
 ```shell
-cat <<EOF > live/minikube/local/dev/default/terragrunt-module-minikube/terraform.tfvars
+cat <<EOF > live/minikube/local/dev/default/docker/terraform.tfvars
 minikube_clusters = {
   "minikube": {
     "driver": "docker",
@@ -43,11 +43,14 @@ EOF
 
 Run:
 ```shell
-terragrunt init --terragrunt-working-dir live/minikube/local/dev/default/terragrunt-module-minikube
-terragrunt plan --terragrunt-working-dir live/minikube/local/dev/default/terragrunt-module-minikube
-terragrunt apply --terragrunt-working-dir live/minikube/local/dev/default/terragrunt-module-minikube
-helm install --create-namespace --namespace argocd argocd k12s/charts/argo-cd-v5.49.0/argo-cd
-kustomize build --enable-helm k12s/app-of-apps/overlays/default | kubectl apply -f -
+terragrunt init --terragrunt-working-dir live/minikube/local/dev/default/docker
+terragrunt plan --terragrunt-working-dir live/minikube/local/dev/default/docker
+terragrunt apply --terragrunt-working-dir live/minikube/local/dev/default/docker
+```
+
+Remove:
+```shell
+terragrunt destroy --terragrunt-working-dir live/minikube/local/dev/default/docker
 ```
 
 Check:
