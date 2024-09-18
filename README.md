@@ -9,8 +9,6 @@ A [`terragrunt`](https://github.com/gruntwork-io/terragrunt) module for [`miniku
 | [docker](https://github.com/docker)                       |
 | [minikube](https://github.com/kubernetes/minikube)        |
 | [kubectl](https://github.com/kubernetes/kubectl)          |
-| [kustomize](https://github.com/kubernetes-sigs/kustomize) |
-| [helm](https://github.com/helm/helm)                      |
 | [terragrunt](https://github.com/gruntwork-io/terragrunt)  |
 | [terraform](https://github.com/hashicorp/terraform)       |
 | [opentofu](https://github.com/opentofu/opentofu)          |
@@ -21,11 +19,6 @@ pre-commit install
 ```
 
 ## Usage
-
-Build:
-```shell
-kustomize build --enable-helm k12s/
-```
 
 Configure:
 ```shell
@@ -41,7 +34,7 @@ minikube_clusters = {
 EOF
 ```
 
-Run:
+Create:
 ```shell
 terragrunt init --terragrunt-working-dir live/minikube/local/dev/default/docker
 terragrunt plan --terragrunt-working-dir live/minikube/local/dev/default/docker
