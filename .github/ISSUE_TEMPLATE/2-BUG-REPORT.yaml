@@ -1,0 +1,97 @@
+name: "🐞 Bug Report"
+description: "Create a new issue for a bug."
+title: "fix: <title>"
+labels:
+  - "bug"
+assignees:
+  - "caerulescens"
+body:
+  # Version
+  - type: textarea
+    id: version
+    attributes:
+      label: "Version"
+      description: Which version were you running?
+      placeholder: e.g. '0.1.0'
+    validations:
+      required: true
+
+  # Terragrunt Version
+  - type: textarea
+    id: terragrunt-version
+    attributes:
+      label: "Terragrunt version"
+      description: Which terragrunt version were you using?
+      placeholder: e.g. '0.67.16'
+    validations:
+      required: true
+
+  # Tofu Version
+  - type: textarea
+    id: tofu-version
+    attributes:
+      label: "Tofu version"
+      description: Which tofu version were you using?
+      placeholder: e.g. '1.8.3'
+    validations:
+      required: true
+
+  # Operating System
+  - type: dropdown
+    id: operating-system
+    attributes:
+      label: "Operating system"
+      description: Which operating system were you using?
+      multiple: false
+      options:
+        - Windows
+        - macOS
+        - GNU/Linux
+    validations:
+      required: true
+
+  # Description
+  - type: textarea
+    id: description
+    attributes:
+      label: "Description"
+      description: Provide details of the issue you encountered
+      placeholder: ...
+    validations:
+      required: true
+
+  # Reproduction
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: "Reproduction"
+      description: Provide details on how to reproduce the issue
+      placeholder: |
+        #. Use config '...'
+        #. Run program '...'
+        #. See error '...'
+      render: bash
+    validations:
+      required: true
+
+  # Screenshots
+  - type: textarea
+    id: screenshot
+    attributes:
+      label: "Screenshots"
+      description: Provide any relevant screenshots
+      value: |
+        ![DESCRIPTION](LINK.png)
+      render: bash
+    validations:
+      required: false
+
+  # Logs
+  - type: textarea
+    id: log
+    attributes:
+      label: "Logs"
+      description: Provide any raw log output
+      render: bash
+    validations:
+      required: false

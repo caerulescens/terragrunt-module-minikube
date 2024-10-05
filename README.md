@@ -4,15 +4,13 @@ A [`terragrunt`](https://github.com/gruntwork-io/terragrunt) module for [`miniku
 
 ## Install
 
-| name                                                      |
-|-----------------------------------------------------------|
-| [docker](https://github.com/docker)                       |
-| [minikube](https://github.com/kubernetes/minikube)        |
-| [kubectl](https://github.com/kubernetes/kubectl)          |
-| [terragrunt](https://github.com/gruntwork-io/terragrunt)  |
-| [terraform](https://github.com/hashicorp/terraform)       |
-| [opentofu](https://github.com/opentofu/opentofu)          |
-| [pre-commit](https://github.com/pre-commit/pre-commit)    |
+| Name                                                   |
+|--------------------------------------------------------|
+| [docker](https://github.com/docker)                    |
+| [kubectl](https://github.com/kubernetes/kubectl)       |
+| [minikube](https://github.com/kubernetes/minikube)     |
+| [tenv](https://github.com/tofuutils/tenv)              |
+| [pre-commit](https://github.com/pre-commit/pre-commit) |
 
 ```shell
 pre-commit install
@@ -22,28 +20,55 @@ pre-commit install
 
 Configure:
 ```shell
-cat <<EOF > live/minikube/local/dev/default/docker/terraform.tfvars
+cat <<EOF > ./live/cluster/docker/terraform.tfvars
 minikube_clusters = {
   "minikube": {
-    "driver": "docker",
-    "nodes": 3,
-    "cpus": 4,
-    "memory": "4096mb"
+    "driver": "docker"
+    "nodes": 3
+    "cpus": 2
+    "memory": "2048mb"
+    "disk_size": "65536mb",
+    "extra_disks": 0
   }
 }
 EOF
 ```
 
-Create:
+Validate:
 ```shell
-terragrunt init --terragrunt-working-dir live/minikube/local/dev/default/docker
-terragrunt plan --terragrunt-working-dir live/minikube/local/dev/default/docker
-terragrunt apply --terragrunt-working-dir live/minikube/local/dev/default/docker
+terragrunt validate-inputs --terragrunt-working-dir live/dev/cluster
 ```
 
-Remove:
+Init:
 ```shell
-terragrunt destroy --terragrunt-working-dir live/minikube/local/dev/default/docker
+terragrunt init --terragrunt-working-dir live/dev/cluster
+```
+
+Plan:
+```shell
+terragrunt plan --terragrunt-working-dir live/dev/cluster
+```
+
+Apply:
+```shell
+terragrunt apply --terragrunt-working-dir live/dev/cluster
+```
+
+Destroy:
+```shell
+terragrunt destroy --terragrunt-working-dir live/dev/cluster
+```
+
+## Development
+
+Validate:
+```shell
+terragrunt hclvalidate
+```
+
+Format:
+```shell
+terragrunt hclfmt
 ```
 
 Check:
