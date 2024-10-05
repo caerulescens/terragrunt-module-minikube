@@ -1,3 +1,0 @@
-locals {
-  profile = "default"
-}
