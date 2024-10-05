@@ -1,0 +1,47 @@
+name: "💡 Feature Request"
+description: "Create a new ticket for a new feature request."
+title: "feat: <title>"
+labels:
+  - "enhancement"
+assignees:
+  - "caerulescens"
+body:
+  # Feature
+  - type: textarea
+    id: summary
+    attributes:
+      label: "Summary"
+      description: What feature would you like to add?
+      placeholder: ...
+    validations:
+      required: true
+
+  # Implementation
+  - type: textarea
+    id: implementation
+    attributes:
+      label: "Implementation"
+      description: How would the feature work in more detail?
+      placeholder: ...
+    validations:
+      required: true
+
+  # Drawbacks
+  - type: textarea
+    id: drawback
+    attributes:
+      label: "Drawbacks"
+      description: What drawbacks does this feature have?
+      placeholder: ...
+    validations:
+      required: false
+
+  # Questions
+  - type: textarea
+    id: question
+    attributes:
+      label: "Questions"
+      description: Are there any unsolved question related to the feature?
+      placeholder: ...
+    validations:
+      required: false
