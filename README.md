@@ -20,15 +20,15 @@ pre-commit install
 
 Configure:
 ```shell
-cat <<EOF > ./live/cluster/docker/terraform.tfvars
+cat <<EOF > ./live/dev/cluster/terraform.tfvars
 minikube_clusters = {
   "minikube": {
+    "ha": false
     "driver": "docker"
     "nodes": 3
     "cpus": 2
     "memory": "2048mb"
-    "disk_size": "65536mb",
-    "extra_disks": 0
+    "disk_size": "32768mb"
   }
 }
 EOF
